@@ -89,12 +89,15 @@ app.get("/episode-skip/:ep_id", async (c) => {
   const ep_id = c.req.param("ep_id")
 
   const inKv = (
-    await kv?.get<Awaited<ReturnType<typeof getSource>>>([
-      "episode skip",
-      ep_id
-    ])
+    await kv?.get<
+      Awaited<ReturnType<typeof getSource>> & { thumbs: string | null }
+    >(["episode skip", ep_id])
   )?.value
-  if (inKv && (!rangeEmpty(inKv.intro) || !rangeEmpty(inKv.outro))) {
+  if (
+    inKv &&
+    (!rangeEmpty(inKv.intro) || !rangeEmpty(inKv.outro)) &&
+    inKv.thumbs
+  ) {
     // void kv?.set(["episode skip", ep_id], inKv, {
     //   expireIn: 2592e6 /* 30 days */
     // })
@@ -125,14 +128,12 @@ app.get("/episode-skip/:ep_id", async (c) => {
       )
         throw new Error("Nothing found 'intro' or 'outro'")
 
-      void kv?.set(["episode skip", ep_id], source, {
+      const data = { ...source, thumbs }
+      void kv?.set(["episode skip", ep_id], data, {
         expireIn: 2592e6 /* 30 days */
       })
 
-      return c.json({
-        ...source,
-        thumbs
-      })
+      return c.json(data)
     } catch (err) {
       console.warn(
         "[episode-skip]: load op/ep server %o failure. Change server (code: %o)",
