@@ -2,7 +2,7 @@ import { parseDOM } from "./parse-dom.ts"
 
 export async function search(keyword: string) {
   const $ = await fetch(
-    `https://9animetv.to/search?keyword=${keyword.replace(/ /g, "+")}`
+    `https://hianime.to/search?keyword=${keyword.replace(/ /g, "+")}`
   )
     .then((res) => res.text())
     .then(parseDOM)

@@ -3,7 +3,7 @@ export function getSource(server_id: string): Promise<{
   tracks: {
     file: string
     label: string
-    kind: "captions"
+    kind: "captions" | "thumbnails"
     default?: true
   }[]
   encrypted: boolean
@@ -18,6 +18,6 @@ export function getSource(server_id: string): Promise<{
   server: number
 }> {
   return fetch(
-    `https://rapid-cloud.co/ajax/embed-6-v2/getSources?id=${server_id}`
+    `https://megacloud.tv/embed-2/ajax/e-1/getSources?id=${server_id}`
   ).then((res) => res.json())
 }

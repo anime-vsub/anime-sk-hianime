@@ -1,7 +1,7 @@
 import { load$ } from "./load-$.ts"
 
 export async function getListEpisodes(anime_id: string) {
-  const $ = await load$(`https://9animetv.to/ajax/episode/list/${anime_id}`)
+  const $ = await load$(`https://hianime.to/ajax/v2/episode/list/${anime_id}`)
 
   return $("a.ep-item")
     .toArray()

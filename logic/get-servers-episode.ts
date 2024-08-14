@@ -1,8 +1,8 @@
-import { load$ } from "./load-$.ts";
+import { load$ } from "./load-$.ts"
 
 export async function getServersEpisode(ep_id: string) {
   const $ = await load$(
-    `https://9animetv.to/ajax/episode/servers?episodeId=${ep_id}`
+    `https://hianime.to/ajax/v2/episode/servers?episodeId=${ep_id}`
   )
 
   return $(".server-item")

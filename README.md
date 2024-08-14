@@ -1,5 +1,5 @@
-# anime-skip-9animetv
-API supports retrieving anime `intro`, `outro` information from `9animetv`
+# anime-sk-hianime
+API supports retrieving anime `intro`, `outro` information from `hianime`
 
 ## Usage
 ### `/list-episodes?name=<string>`
@@ -35,15 +35,16 @@ interface InOutroEpisode {
     default?: true
   }[]
   encrypted: boolean
-  intro: {
+  intro?: {
     start: number
     end: number
   }
-  outro: {
+  outro?: {
     start: number
     end: number
   }
   server: number
+  thumbs: string | null
 }
 ```
 

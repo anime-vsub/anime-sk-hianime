@@ -107,15 +107,21 @@ app.get("/episode-skip/:ep_id", async (c) => {
     try {
       const confServer = await getConfServer(server.id)
 
-      const idRaw = confServer.link.replace(/^https?:\/\//i, "").split("/")[2]
+      const idRaw = confServer.link.slice(
+        (confServer.link.lastIndexOf("/") >>> 0) + 1
+      )
       const serverId = idRaw.slice(0, idRaw.indexOf("?") >>> 0)
 
       const source = await getSource(serverId)
+      const thumbs =
+        (await source.tracks.find((track) => track.kind === "thumbnails")
+          ?.file) ?? null
 
       if (
-        !("intro" in source) ||
-        !("outro" in source) ||
-        (rangeEmpty(source.intro) && rangeEmpty(source.outro))
+        (!("intro" in source) ||
+          !("outro" in source) ||
+          (rangeEmpty(source.intro) && rangeEmpty(source.outro))) &&
+        !thumbs
       )
         throw new Error("Nothing found 'intro' or 'outro'")
 
@@ -123,7 +129,10 @@ app.get("/episode-skip/:ep_id", async (c) => {
         expireIn: 2592e6 /* 30 days */
       })
 
-      return c.json(source)
+      return c.json({
+        ...source,
+        thumbs
+      })
     } catch (err) {
       console.warn(
         "[episode-skip]: load op/ep server %o failure. Change server (code: %o)",
