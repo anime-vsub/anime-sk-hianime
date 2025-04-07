@@ -1,6 +1,7 @@
+import "@std/dotenv/load"
+
 import { getListEpisodes } from "./logic/get-list-episodes.ts"
 import { getServersEpisode } from "./logic/get-servers-episode.ts"
-import { getConfServer } from "./logic/get-conf-server.ts"
 import { getSource } from "./logic/get-source.ts"
 
 import { Hono } from "hono"
@@ -115,12 +116,14 @@ app.get("/episode-skip/:ep_id", async (c) => {
 
   for (const server of servers) {
     try {
-      const confServer = await getConfServer(server.id)
+      // const confServer = await getConfServer(server.id)
 
-      const idRaw = confServer.link.slice(
-        (confServer.link.lastIndexOf("/") >>> 0) + 1
-      )
-      const serverId = idRaw.slice(0, idRaw.indexOf("?") >>> 0)
+      // const idRaw = confServer.link.slice(
+      //   (confServer.link.lastIndexOf("/") >>> 0) + 1
+      // )
+      // const serverId = idRaw.slice(0, idRaw.indexOf("?") >>> 0)
+
+      const serverId = `${ep_id}$${server.type}`
 
       const source = await getSource(serverId)
       const thumbs =
@@ -133,7 +136,7 @@ app.get("/episode-skip/:ep_id", async (c) => {
           (rangeEmpty(source.intro) && rangeEmpty(source.outro))) &&
         !thumbs
       )
-        throw new Error("Nothing found 'intro' or 'outro'")
+        throw new Error(`Nothing found 'intro' or 'outro' (server: ${serverId})`)
 
       const data = { ...source, thumbs }
       void kv?.set(["episode skip", ep_id], data, {

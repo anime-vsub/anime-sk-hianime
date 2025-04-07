@@ -1,7 +1,7 @@
 import { load$ } from "./load-$.ts"
 
 export async function getListEpisodes(anime_id: string) {
-  const $ = await load$(`https://hianime.to/ajax/v2/episode/list/${anime_id}`)
+  const $ = await load$(`https://hianime.to/ajax/v2/episode/list/${anime_id.match(/\d+$/)![0]}`)
 
   return $("a.ep-item")
     .toArray()
@@ -15,7 +15,7 @@ export async function getListEpisodes(anime_id: string) {
 
       if (id === undefined || order === undefined) return null
 
-      return { id, order, name, title }
+      return { id: `${anime_id}$episode$${id}`, order, name, title }
     })
     .filter(Boolean)
 }

@@ -2,7 +2,7 @@ import { load$ } from "./load-$.ts"
 
 export async function getServersEpisode(ep_id: string) {
   const $ = await load$(
-    `https://hianime.to/ajax/v2/episode/servers?episodeId=${ep_id}`
+    `https://hianime.to/ajax/v2/episode/servers?episodeId=${ep_id.split('$').at(-1)}`
   )
 
   return $(".server-item")
@@ -11,8 +11,9 @@ export async function getServersEpisode(ep_id: string) {
       const $div = $(div)
 
       const id = $div.attr("data-id")!
+      const type = $div.attr("data-type")
       const name = $div.text().trim()
 
-      return { id, name }
+      return { id, type, name }
     })
 }
