@@ -32,7 +32,7 @@ export async function getSource(server_id: string): Promise<{
       return {
         file: subtitle.url,
         label: subtitle.lang,
-        kind: "captions"
+        kind: subtitle.lang === "thumbnails" ? "thumbnails" : "captions"
       }
     }),
     server: 0
