@@ -2,7 +2,7 @@ import { load$ } from "./load-$.ts";
 
 export async function search(keyword: string) {
   const $ = await load$(
-    `https://hianime.to/search?keyword=${keyword.replace(/ /g, "+")}`,false
+    `https://hianime.bz/search?keyword=${keyword.replace(/ /g, "+")}`,false
   )
 
   return $(".flw-item")

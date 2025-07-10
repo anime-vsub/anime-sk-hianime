@@ -2,7 +2,7 @@ import { load$ } from "./load-$.ts"
 
 export async function getListEpisodes(anime_id: string) {
   const $ = await load$(
-    `https://hianime.to/ajax/v2/episode/list/${anime_id.match(/\d+$/)![0]}`
+    `https://hianime.bz/ajax/v2/episode/list/${anime_id.match(/\d+$/)![0]}`
   )
 
   return $("a.ep-item")

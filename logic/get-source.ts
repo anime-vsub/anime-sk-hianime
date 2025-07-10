@@ -1,5 +1,3 @@
-const HIANIME_API = Deno.env.get("HIANIME_API")
-
 export async function getSource(server_id: string): Promise<{
   sources: string
   tracks: {
@@ -19,22 +17,25 @@ export async function getSource(server_id: string): Promise<{
   }
   server: number
 }> {
-  const data = await fetch(`${HIANIME_API}?episodeId=${server_id}`).then(
-    (res) => res.json()
-  )
+  const data = await fetch(
+    `https://megacloud.blog/embed-2/v2/e-1/getSources?id=${server_id}`
+  ).then((res) => res.json())
 
-  return {
-    intro: data.intro,
-    outro: data.outro,
-    sources: data.sources[0]?.url,
-    encrypted: false,
-    tracks: data.subtitles.map((subtitle: { url: string; lang: string }) => {
-      return {
-        file: subtitle.url,
-        label: subtitle.lang,
-        kind: subtitle.lang === "thumbnails" ? "thumbnails" : "captions"
-      }
-    }),
-    server: 0
-  }
+  return data
+  // console.log(data)
+
+  // return {
+  //   intro: data.intro,
+  //   outro: data.outro,
+  //   sources: data.sources[0]?.url,
+  //   encrypted: false,
+  //   tracks: data.subtitles.map((subtitle: { url: string; lang: string }) => {
+  //     return {
+  //       file: subtitle.url,
+  //       label: subtitle.lang,
+  //       kind: subtitle.lang === "thumbnails" ? "thumbnails" : "captions"
+  //     }
+  //   }),
+  //   server: 0
+  // }
 }

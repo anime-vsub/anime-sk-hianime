@@ -4,11 +4,13 @@ import { getListEpisodes } from "./logic/get-list-episodes.ts"
 import { getServersEpisode } from "./logic/get-servers-episode.ts"
 import { getSource } from "./logic/get-source.ts"
 
+
 import { Hono } from "hono"
 import { cors } from "hono/cors"
 import { Cache } from "ttl_cache"
 import { searchAnime } from "./logic/search-anime.ts"
 import { rangeEmpty } from "./logic/range-empty.ts"
+import { getConfServer } from "./logic/get-conf-server.ts";
 
 const app = new Hono()
 const kv = await Deno.openKv?.()
@@ -116,14 +118,14 @@ app.get("/episode-skip/:ep_id", async (c) => {
 
   for (const server of servers) {
     try {
-      // const confServer = await getConfServer(server.id)
+      const confServer = await getConfServer(server.id)
 
-      // const idRaw = confServer.link.slice(
-      //   (confServer.link.lastIndexOf("/") >>> 0) + 1
-      // )
-      // const serverId = idRaw.slice(0, idRaw.indexOf("?") >>> 0)
+      const idRaw = confServer.link.slice(
+        (confServer.link.lastIndexOf("/") >>> 0) + 1
+      )
+      const serverId = idRaw.slice(0, idRaw.indexOf("?") >>> 0)
 
-      const serverId = `${ep_id}$${server.type}`
+      // const serverId = `${ep_id}$${server.type}`
 
       const source = await getSource(serverId)
       const thumbs =
